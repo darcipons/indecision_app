@@ -1,41 +1,19 @@
 'use strict';
 
-console.log('app.js is running');
-
-// JSX - JavaScript XML. Provided by React
+var visibility = false;
 
 var app = {
-  title: 'Indecision App',
-  subtitle: 'App is being made',
-  options: []
+  title: 'Visibility Toggle',
+  caption: 'Hey, here are some details'
 };
 
-function getOptions(option) {
-  if (option.length > 0) {
-    return React.createElement(
-      'p',
-      null,
-      'Here are your options: ',
-      option
-    );
-  } else {
-    return 'No Options';
-  }
-}
-
-var onFormSubmit = function onFormSubmit(e) {
-  e.preventDefault();
-  var option = e.target.elements.option.value;
-
-  if (option) {
-    app.options.push(option);
-    e.target.elements.option.value = '';
-    render();
-  }
+var toggleVisibilty = function toggleVisibilty() {
+  visibility = !visibility;
+  render();
 };
 
 var render = function render() {
-  var template = React.createElement(
+  var visible = React.createElement(
     'div',
     null,
     React.createElement(
@@ -43,35 +21,18 @@ var render = function render() {
       null,
       app.title
     ),
-    app.subtitle && React.createElement(
-      'p',
-      null,
-      app.subtitle
-    ),
     React.createElement(
       'button',
-      { onClick: removeAll },
-      'Remove All'
+      { onClick: toggleVisibilty },
+      visibility ? 'Hide Details' : 'Show Details'
     ),
-    getOptions(app.options),
-    React.createElement(
+    visibility && React.createElement(
       'p',
       null,
-      app.options.length
-    ),
-    React.createElement(
-      'form',
-      { onSubmit: onFormSubmit },
-      React.createElement('input', { type: 'text', name: 'option' }),
-      React.createElement(
-        'button',
-        null,
-        'Add Option'
-      )
+      app.caption
     )
   );
-  ReactDOM.render(template, appRoot);
+  ReactDOM.render(visible, document.getElementById('app'));
 };
 
-var appRoot = document.getElementById('app');
 render();
