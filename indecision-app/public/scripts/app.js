@@ -7,7 +7,7 @@ console.log('app.js is running');
 var app = {
   title: 'Indecision App',
   subtitle: 'App is being made',
-  options: ['One', 'Two']
+  options: []
 };
 
 function getOptions(option) {
@@ -22,60 +22,56 @@ function getOptions(option) {
     return 'No Options';
   }
 }
-var template = React.createElement(
-  'div',
-  null,
-  React.createElement(
-    'h1',
-    null,
-    app.title
-  ),
-  app.subtitle && React.createElement(
-    'p',
-    null,
-    app.subtitle
-  ),
-  getOptions(app.options)
-);
 
-var count = 0;
-var addOne = function addOne() {
-  console.log('addOne');
+var onFormSubmit = function onFormSubmit(e) {
+  e.preventDefault();
+  var option = e.target.elements.option.value;
+
+  if (option) {
+    app.options.push(option);
+    e.target.elements.option.value = '';
+    render();
+  }
 };
 
-var minusOne = function minusOne() {
-  console.log('minusOne');
-};
-
-var reset = function reset() {
-  console.log('reset');
-};
-
-var templateTwo = React.createElement(
-  'div',
-  null,
-  React.createElement(
-    'h1',
+var render = function render() {
+  var template = React.createElement(
+    'div',
     null,
-    'Count: ',
-    count
-  ),
-  React.createElement(
-    'button',
-    { onClick: addOne },
-    '+1'
-  ),
-  React.createElement(
-    'button',
-    { onClick: minusOne },
-    '-1'
-  ),
-  React.createElement(
-    'button',
-    { onClick: reset },
-    'Reset'
-  )
-);
+    React.createElement(
+      'h1',
+      null,
+      app.title
+    ),
+    app.subtitle && React.createElement(
+      'p',
+      null,
+      app.subtitle
+    ),
+    React.createElement(
+      'button',
+      { onClick: removeAll },
+      'Remove All'
+    ),
+    getOptions(app.options),
+    React.createElement(
+      'p',
+      null,
+      app.options.length
+    ),
+    React.createElement(
+      'form',
+      { onSubmit: onFormSubmit },
+      React.createElement('input', { type: 'text', name: 'option' }),
+      React.createElement(
+        'button',
+        null,
+        'Add Option'
+      )
+    )
+  );
+  ReactDOM.render(template, appRoot);
+};
+
 var appRoot = document.getElementById('app');
-
-ReactDOM.render(templateTwo, appRoot);
+render();
